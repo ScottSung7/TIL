@@ -26,7 +26,8 @@
   
       @BeforeEach
       void setUp() {
-          form = mock(SignUpController.SignUpForm.class);
+          form = spy(SignUpFormFixture.create());
+          //mock이 아닌 값이 들어있는 Fixture를 이용해 spy를 사용해야 한다.
       }
   
       @Test
