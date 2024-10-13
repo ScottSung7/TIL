@@ -1,0 +1,33 @@
+### 1. (Q) 컨트롤러에서도 Mockito로 stub하지 말고 Stub 클래스를 제작해야 할까요?
+물론 Stub클래스로 Service를 사용하면 테스트에 더 확신을 받을 수도 있겠지만, **표현 계층에서는 값 보다도 리턴값을 특정 포멧으로 받고 주는 Formatting이 더 중요하다는 생각**입니다. 
+시간이 허락한다면 또는 여러 서비스를 호출하게 되어서 컨트롤러의 로직이 복잡하면 더 확실히 값을 받기위해 Stub 클래스를 제작할 수 도 있겠지만, **이 경우 비즈니스 로직이 표현계층에 구현 되어있을 가능성**이 높습니다.
+여러 서비스를 사용한다면 응용계층에 클래스를 만들고 보통의 경우 **컨트롤러에는 하나의 서비스 메서드 정도만 참조하기에 실수의 여지가 적다고 생각**해 Mockito Stubbing으로도 보통 괜찮을 것이라는 생각입니다.
+
+### 2. (Q) 컨트롤러에서 생기지 않는 Exception 메시지도 테스트 해주어야 할까? 
+Exception 메시지를 주는건 표현 계층이다보니, 메시지가 예상과 다르게 전달되고 있었습니다. 그러던 와중 비즈니스 로직과 인프라 부분을 따라가며 예상가능한 Exception을 테스트에 넣어주면 좋지 않을까? 했지만
+**이 경우 컨트롤러의 책임을 넘어서는 듯하고 또한, 테스트도 통합 테스트로 구현이 되어야**합니다. 간단히, **강제로 Exception을 던져서 테스트에서 알려줄까 했지만, 이 경우에 Exception이 사용되지 않는등의 변경시
+테스트에 반영될 수 없다는 생각**입니다. 그래서 Exception메시지의 포멧 정도만 테스트해주는것이 맞는 것 같다는 생각입니다. 
+
+```java
+    @Test
+    @DisplayName("MemberException 발생 예시")
+    void signUp_Failed() throws Exception {
+
+        //given
+        final String requestURL = "/sign-in";
+        SignUpController.SignUpRequest form = SignUpFormFixture.create();
+        when(signUpService.signUp(any(Member.class))).thenThrow(new MemberException(ALREADY_REGISTERED_USER));
+        //이렇게 컨트롤러에 구현을 했지만 Exception Controller에서 포맷 테스트용으로만 사용 중입니다.
+
+        //when
+        ResultActions resultActions = mockMvc.perform(post(requestURL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(form)));
+
+        //then
+        resultActions.andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value(ALREADY_REGISTERED_USER.getDeatil()))
+                .andDo(print());
+    }
+
+```
