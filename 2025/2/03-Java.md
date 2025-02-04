@@ -16,3 +16,6 @@ A. C1 & C2
 - 더 많은 프로파일링 데이터를 활용하여 복잡한 코드 경로를 분석하고 최적화.<br>
 <img width="710" alt="Screenshot 2025-02-04 at 5 02 11 PM" src="https://github.com/user-attachments/assets/60eee22b-ee0d-44ca-8023-255f47de1f65" />
 
+B. 빈 후처리기
+- 스프링 빈실행 -> 자바 클래스로딩 -> 자바 객체(불완전) -> 스프링 빈후처리
+<img width="715" alt="Screenshot 2025-02-04 at 7 01 18 PM" src="https://github.com/user-attachments/assets/88088370-8d77-414a-b310-513178659a85" />
