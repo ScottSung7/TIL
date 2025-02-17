@@ -1,0 +1,7 @@
+- HTTP버전 별 효율 따져보기
+  - 파일 전송시 keep-live를 이용한거랑 병렬 처리랑 비교해 보자.
+  - HTTP차이
+    - [링크](https://dlwnsdud205.tistory.com/327)
+  - 병렬처리
+    - [올리브영 셔터](https://oliveyoung.tech/2024-07-04/image-upload-speed-optimization/)
+    - [자바에서](https://hsb422.tistory.com/entry/%EB%AF%B8-%ED%8C%8C%EC%9D%BC-%EC%97%85%EB%A1%9C%EB%93%9C-%EC%B5%9C%EC%A0%81%ED%99%94-%EC%98%AE%EA%B8%B8-%EA%B1%B0%EC%9E%84)
