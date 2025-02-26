@@ -5,6 +5,7 @@
     - 이 기능 사용시 기본생성자가 있지 않아도 된다.
     - 이 기능이 불변 객체를 만들기 더 편하다.
     - 그러나 롬복 버전 체크가 필요하다.
+  - @Jacksonized를 사용할수 없다면 @JsonCreator과 함께 @JsonProperty를 이용해야 생성자로 생성할 수 있다.
 
 #### 2. 스프링 Validation은 "생성"후에 일어난다
   - 그렇기에 생성자의 로직 중에 NPE등 다른 예외가 나온다면 Validation의 MethodArgumentNotValid가 아니라 다른 예외가 먼저 터진다.
@@ -15,3 +16,14 @@
   - PostMan으로 테스트 중 단위 테스트는 통과 했는데 실제 요청에서 NPE가 나오는 경우가 있었다.
   - 이는 디비의 로직이 모킹으로 가려져서 디비의 실제 동작은 달랐던것.
     - 그렇기에 대부분 단위 테스트로 커버가 되지만 주요 시나리오를 따라가는 통합 테스트도 꼭 필요하다.
+```java
+ @Test
+    void findById() {
+        // Given
+        Long id = 1L;
+        CheckIn checkIn = CheckInFixtures.CheckInT.create();
+        CheckInEntity sut = CheckInFixtures.CheckInEntityT.create(checkIn);
+        when(checkInSpringJPARepository.findById(id)).thenReturn(Optional.of(sut));
+        //fixme: 원래 이 테스트에서 에러가 났어야 하는데 실제 디비랑 다르게 스터빙 되어있다 보니 에러가 안 났다.
+
+```
