@@ -49,7 +49,6 @@
         private String title;
 
         @NotNull(message = NO_START_AND_TIME_OPTION)
-        @Setter(AccessLevel.PRIVATE)
         private LocalDateTime end;
 
         @Nullable
