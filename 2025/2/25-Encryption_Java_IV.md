@@ -1,29 +1,6 @@
 -- 코드
 ```java
-package com.company.member.infrastructure.encryption.aes256;
-
-import com.company.member.infrastructure.encryption.aes256.db.JavaCryptoIVRepository;
-import com.company.member.infrastructure.encryption.aes256.db.entity.JavaCryptoIVEntity;
-import com.company.member.infrastructure.encryption.aes256.exception.ErrorCode.JavaCryptoErrorCode;
-import com.company.member.infrastructure.encryption.aes256.exception.JavaCryptoException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
-import javax.crypto.*;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
-import java.nio.charset.StandardCharsets;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.util.Base64;
-
-import static com.company.member.infrastructure.encryption.aes256.exception.ErrorCode.JavaCryptoErrorCode.*;
-
 @Component
-@Deprecated
 public class JavaCryptoUtil_IV {
 
     private String encryptionAlgorithm = "AES";
