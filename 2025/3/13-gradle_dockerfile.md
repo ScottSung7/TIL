@@ -11,7 +11,7 @@ RUN gradle test --no-daemon
 FROM base AS build
 RUN gradle build --no-daemon -x test
 
-FROM openjdk:11.0-slim
+FROM openjdk:17.0-slim
 WORKDIR /app
 COPY --from=build /build/build/libs/checkin-0.0.1-SNAPSHOT.jar .
 USER nobody
