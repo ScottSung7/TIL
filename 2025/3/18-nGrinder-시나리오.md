@@ -7,6 +7,7 @@ import net.grinder.script.GTest
 import net.grinder.script.Grinder
 import net.grinder.scriptengine.groovy.junit.GrinderRunner
 import net.grinder.scriptengine.groovy.junit.annotation.BeforeProcess
+import net.grinder.scriptengine.groovy.junit.annotation.AfterThread
 import net.grinder.scriptengine.groovy.junit.annotation.BeforeThread
 // import static net.grinder.util.GrinderUtils.* // You can use this if you're using nGrinder after 3.2.3
 import org.junit.Before
@@ -19,6 +20,9 @@ import org.ngrinder.http.HTTPRequestControl
 import org.ngrinder.http.HTTPResponse
 import org.ngrinder.http.cookie.Cookie
 import org.ngrinder.http.cookie.CookieManager
+import java.util.concurrent.atomic.AtomicInteger
+import groovy.json.JsonSlurper
+import groovy.json.JsonOutput
 
 /**
 * A simple example using the HTTP plugin that shows the retrieval of a single page via HTTP.
@@ -32,6 +36,7 @@ class TestRunner {
 
 	public static GTest test1
 	public static GTest test2
+	public static GTest test3
 	public static HTTPRequest request
 	public static Map<String, String> headers = [:]
 	public static List<Cookie> cookies = []
@@ -41,6 +46,7 @@ class TestRunner {
 		HTTPRequestControl.setConnectionTimeout(300000)
 		test1 = new GTest(1, "GET /test")
 		test2 = new GTest(2, "POST /helps/check-ins")
+		test3 = new GTest(3, "PUT /helps/check-ins/{checkin-id}")
 		request = new HTTPRequest()
 		grinder.logger.info("before process.")
 	}
@@ -49,15 +55,14 @@ class TestRunner {
 	public void beforeThread() {
 		test1.record(this, "test1")
 		test2.record(this, "test2")
+		test3.record(this, "test3")
 		grinder.statistics.delayReports = true
 		grinder.logger.info("before thread.")
 	}
 
 	@Test
 	public void test1() {
-		grinder.logger.info("TEST1 실행 시작")
 		HTTPResponse response = request.GET("http://127.0.0.1:8081/test")
-		grinder.logger.info("응답 코드: {}", response.statusCode)
 		assertThat(response.statusCode, is(200))
 
 		if (response.statusCode == 301 || response.statusCode == 302) {
@@ -66,23 +71,71 @@ class TestRunner {
 			assertThat(response.statusCode, is(200))
 		}
 	}
+	
+	private static AtomicInteger globalCounter = new AtomicInteger(1)
+	private static final String AGENT_NAME = "A";
+	private static ThreadLocal<Long> checkInIdStore = new ThreadLocal<>()
+	private static ThreadLocal<String> currentIdStore = new ThreadLocal<>()
+
 	
 	@Test
 	public void test2(){
-			
-		Map<String, Object> params2 = ["helpRegisterId" : 1, "placeId" : "place123", "placeName" : "테스트 장소", "start" : "2025-02-26T19:00:00", "option" : 30, "reward" : 5000 ]
-	
-		HTTPResponse response = request.POST("http://127.0.0.1:8081/helps/check-ins", params2)
-		assertThat(response.statusCode, is(200))
-
+		int currentNumber = globalCounter.getAndIncrement()
+		String currentId = currentNumber;
+		currentIdStore.set(currentId);
 		
+		Map<String, Object> params = 
+			["helpRegisterId" : currentId, "placeId" : "place123", "placeName" : "테스트 장소", "start" : "2025-02-26T19:00:00", "option" : 30, "reward" : 5000 ]
+	
+		HTTPResponse response = request.POST("http://127.0.0.1:8081/helps/check-ins", params)
+		assertThat(response.statusCode, is(200))
+		
+		String responseBody = response.bodyText  // ✅ bodyText 사용
+		JsonSlurper slurper = new JsonSlurper()
+		Map<String, Object> jsonResponse = slurper.parseText(responseBody)
+
+		// ID 추출
+		long id = ((Map<Long, Object>)jsonResponse.get("data")).get("id") as Integer
+		grinder.logger.info("생성된 ID: {}", id);
+		checkInIdStore.set(id);
 		if (response.statusCode == 301 || response.statusCode == 302) {
 			grinder.logger.warn("Warning. The response may not be correct. The response code was {}.", response.statusCode)
 		} else {
 			assertThat(response.statusCode, is(200))
 		}
+	}
+	@Test
+	public void test3(){
+		Long checkInId = checkInIdStore.get()
+		String currentId = currentIdStore.get()
 		
+		Map<String, Object> params = 
+			["checkInId" : checkInId, 
+			"helpRegisterId" : currentId, 
+			"placeId" : "place123", 
+			"start" : "2025-02-26T19:00:00",
+			"reward" : 10,  
+			"title" : "updated", 
+			"end" : "2025-02-26T19:30:00"]
+	
+		HTTPResponse response = request.PUT("http://127.0.0.1:8081/helps/check-ins/" + checkInId, params)
+		assertThat(response.statusCode, is(200))
+
+
+		if (response.statusCode == 301 || response.statusCode == 302) {
+			grinder.logger.warn("Warning. The response may not be correct. The response code was {}.", response.statusCode)
+		} else {
+			assertThat(response.statusCode, is(200))
+		}
 	}
 	
+	@AfterThread
+	public void afterThread() {
+		checkInIdStore.set(null)
+		currentIdStore.set(null)
+	}
+
+	
 }
-  ```
+
+```
