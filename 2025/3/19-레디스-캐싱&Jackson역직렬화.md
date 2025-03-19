@@ -1,4 +1,5 @@
-- 역직렬화시 OBJECT_AND_NON_CONCRETE로 객체와 추상클래스 @class로 사용가능. 
+- 역직렬화시 OBJECT_AND_NON_CONCRETE로 객체와 추상클래스 @class로 사용가능.
+   - [링크](https://isaac1102.github.io/2021/04/28/jackson) 
 ```java
    ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
@@ -10,6 +11,13 @@
                 JsonTypeInfo.As.PROPERTY
         );
 ```
+> 옵션
+> - JAVA_LANG_OBJECT	선언된 유형으로서 객체가 포함된 프로퍼티(명시적 타입을 제외한 제네릭 타입을 포함한다.)
+> 정보를 제공하겠다.
+> - NON_CONCRETE_AND_ARRAYS	OBJECT_AND_NON_CONCRETE에 포함된 모든 타입의 프로퍼티와 이러한 요소의 배열 타입 정보를 제공하겠다.
+> - NON_FINAL	JSON으로부터 올바르게 유추된 String, Boolean, Integer, Double을 제외한 모든 non-final 타입정보를 제공하겠다. 뿐만 아니라 non-final 타입의 모든 배열의 프로퍼티 정보도 제공하겠다.
+> - OBJECT_AND_NON_CONCRETE	선언된 타입의 객체이거나 abstract 타입의 프로퍼티 정보를 제공하겠다.
+
 - JsonTypeInfo를 통해 역직렬화할 클래스 정보를 넣어준다.
    - 다만, 이 방법 사용시 클래스 정보를 같이 저장해야하는 단점이 있다.
    - [링크1](https://velog.io/@youakdl12/JsonTypeInfo-JsonSubType), [링크2](https://alstn113.tistory.com/26)
