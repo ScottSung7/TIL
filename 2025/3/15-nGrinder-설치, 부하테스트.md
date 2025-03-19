@@ -3,6 +3,11 @@
 - [예산](https://velog.io/@sontulip/web-performance-budget)
 - [PageSpeedInsight](https://pagespeed.web.dev/)
 
+```
+./run_agent_bg.sh 백그라운드 에이전트 실행
+
+pgrep -fl run_agent.sh 에이전트 실행 확인
+```
 <br>
 
 - [시나리오](https://kirinman.tistory.com/102)
