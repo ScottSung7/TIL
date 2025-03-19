@@ -7,6 +7,8 @@
 ./run_agent_bg.sh 백그라운드 에이전트 실행
 
 pgrep -fl run_agent.sh 에이전트 실행 확인
+
+java -Djava.io.tempdir=/home/rocky/ngrinder/lib -jar ngrinder-controller-3.5.9.war --port 7070 엔그라인더 컨트롤러 실행 
 ```
 <br>
 
