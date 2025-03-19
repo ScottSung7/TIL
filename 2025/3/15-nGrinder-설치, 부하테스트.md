@@ -2,7 +2,7 @@
 - [설치와 사용](https://velog.io/@gjwjdghk123/nGrinder-%EC%84%A4%EC%B9%98%ED%95%98%EA%B8%B0-%EB%B0%8F-%ED%85%8C%EC%8A%A4%ED%8A%B8-%ED%95%B4%EB%B3%B4%EA%B8%B0)
 - [예산](https://velog.io/@sontulip/web-performance-budget)
 - [PageSpeedInsight](https://pagespeed.web.dev/)
-
+- [클라우드](https://velog.io/@dydgjs2016/nGrinder-%EC%84%A4%EC%B9%98-%EB%B0%8F-%ED%85%8C%EC%8A%A4%ED%8A%B8-%ED%95%B4%EB%B3%B4%EA%B8%B0)
 ```
 ./run_agent_bg.sh 백그라운드 에이전트 실행
 
@@ -12,6 +12,15 @@ java -Djava.io.tempdir=/home/rocky/ngrinder/lib -jar ngrinder-controller-3.5.9.w
 
 jar -xvf controller.war war 압축 풀기
 tar -svf agent.tar tar 압축 풀기
+
+sudo vim agent.conf 초기 설정(같은 서버라면 localhost, 아니라면 security group에서 풀어주어야 함)
+
+common.start_mode=agent
+agent.controller_host=아이피
+agent.controller_port=16001
+agent.resion = NONE
+agent.owner= admin
+
 ```
 <br>
 
