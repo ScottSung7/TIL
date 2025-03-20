@@ -8,7 +8,8 @@
 
 pgrep -fl run_agent.sh 에이전트 실행 확인
 
-java -Djava.io.tempdir=/home/rocky/ngrinder/lib -jar ngrinder-controller-3.5.9.war --port 7070 엔그라인더 컨트롤러 실행
+java -Djava.io.tmpdir=/home/rocky/ngrinder/lib -jar ngrinder-controller-3.5.9.war --port 7070 엔그라인더 컨트롤러 실행
+nohup java -Djava.io.tmpdir=/home/rocky/ngrinder/lib -jar ngrinder-controller-3.5.9.war --port 7070 > output.log 2>&1 & 백그라운드 실행 & 에러시 끄지않고 로그로 출력.
 
 jar -xvf controller.war war 압축 풀기
 tar -svf agent.tar tar 압축 풀기
