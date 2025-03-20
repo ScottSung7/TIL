@@ -14,7 +14,7 @@ nohup java -Djava.io.tmpdir=/home/rocky/ngrinder/lib -jar ngrinder-controller-3.
 jar -xvf controller.war war 압축 풀기
 tar -svf agent.tar tar 압축 풀기
 
-wget https://github.com/naver/ngrinder/releases/download/ngrinder-3.5.9-20230227/ngrinder-controller-3.5.9.war 에이전트 다운
+wget http://IP:Port/agent/download/ngrinder-agent-3.5.9-IP.tar 에이전트 다운
 sudo vim agent.conf 초기 설정(같은 서버라면 localhost, 아니라면 security group에서 풀어주어야 함)
 
 common.start_mode=agent
