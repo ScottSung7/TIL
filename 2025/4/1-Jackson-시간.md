@@ -1,5 +1,4 @@
 ```
-// Value Serializer with JavaTimeModule
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule()); // JavaTimeModule 등록
         objectMapper.findAndRegisterModules(); // 다른 모듈 자동 등록
