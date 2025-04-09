@@ -10,6 +10,10 @@
                 ObjectMapper.DefaultTyping.OBJECT_AND_NON_CONCRETE,
                 JsonTypeInfo.As.PROPERTY
         );
+
+//강제 변환 방법
+Object rawData = redisTemplate.opsForValue().get(cacheKey);
+CheckInSelectDTO dto = objectMapper.convertValue(rawData, CheckInSelectDTO.class);
 ```
 > 옵션
 > - JAVA_LANG_OBJECT	선언된 유형으로서 객체가 포함된 프로퍼티(명시적 타입을 제외한 제네릭 타입을 포함한다.)
