@@ -36,3 +36,17 @@ agent.owner= admin
 - [부하테스트 JSCode](https://www.youtube.com/playlist?list=PLtUgHNmvcs6qAqWz-UhH-_ploSbK2eHwG)
 - [스프링 캠프](https://www.youtube.com/watch?v=jWxUMtum-H0)
 - [+ Pinpoint](https://velog.io/@max9106/nGrinderPinpoint-test1)
+
+```
+계산
+1. 목표 1일 총 요청수 : 100만 * 5 * 2 = 1000만 
+2. 1일 평균 RPS : 1000만 / (12 * 60 * 60) = **231 TPS**
+3. 최대 트래픽 : 231 * 10 = **2310 TPS**
+4. 선정 이유. 
+    - 한 번 접속시 등록 → 검색 → 매칭 → 인증 → 수락. 총 5번의 연결 예상.
+    - DAU 100만 예상. (네이버의 1일 DAU의 1/5)
+    - 자주 사용시 점심, 저녁 두번 접속 예상.
+    - 평소보다 특정 시간대에만 사용이 많아 질 것으로 최대 10배까지 몰릴 것을 예상.
+    - 12시간의 사용시간.
+
+```
